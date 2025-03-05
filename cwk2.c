@@ -1,4 +1,4 @@
-// Updated cwk2.c with parallel mean calculation
+// Updated cwk2.c with parallel variance calculation
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,12 +53,38 @@ int main(int argc, char **argv) {
         mean = globalSum / globalSize;
     }
     
-    // Broadcast mean to all processes
-    MPI_Bcast(&mean, 1, MPI_FLOAT, 0, MPI_COMM_WORLD);
+    // Binary tree communication of mean
+    int lev = 1;
+    while ((1 << lev) <= numProcs) lev++;
+    for (int d = lev - 1; d >= 0; d--) {
+        int partner = rank ^ (1 << d);
+        if (partner < numProcs) {
+            if (rank < partner) {
+                MPI_Send(&mean, 1, MPI_FLOAT, partner, 0, MPI_COMM_WORLD);
+            } else {
+                MPI_Recv(&mean, 1, MPI_FLOAT, partner, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            }
+        }
+    }
+    
+    // Compute local variance sum
+    float localVarianceSum = 0.0f;
+    for (i = 0; i < localSize; i++) {
+        localVarianceSum += (localData[i] - mean) * (localData[i] - mean);
+    }
+    
+    // Reduce to get global variance sum and compute variance
+    float globalVarianceSum = 0.0f;
+    MPI_Reduce(&localVarianceSum, &globalVarianceSum, 1, MPI_FLOAT, MPI_SUM, 0, MPI_COMM_WORLD);
+    float variance = 0.0f;
+    if (rank == 0) {
+        variance = globalVarianceSum / globalSize;
+    }
     
     // Output results on rank 0
     if (rank == 0) {
         printf("Parallel Mean Computed: %f\n", mean);
+        printf("Parallel Variance Computed: %f\n", variance);
     }
     
     free(localData);
