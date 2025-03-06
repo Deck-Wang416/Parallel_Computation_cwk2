@@ -1,11 +1,11 @@
-No. Nodes:    Total No. Processes:     Mean time (average of 3 runs) in seconds:      Parallel speed-up, S:
-==========    ====================     =========================================      =====================
-1                       1                   0.007451                                    1.00
-1                       2                   0.004094                                    1.82
-1                       4                   0.001984                                    3.76
-1                       8                   0.001143                                    6.52
-2                       16                  0.001100                                    6.77
-2                       32                  0.001322                                    5.64
+No. Nodes:    Total No. Processes:    Mean time (average of 3 runs) in seconds:    Parallel speed-up, S:
+==========    ====================    =========================================    =====================
+1            1                        0.007451                                    1.00
+1            2                        0.004094                                    1.82
+1            4                        0.001984                                    3.76
+1            8                        0.001143                                    6.52
+2            16                       0.001100                                    6.77
+2            32                       0.001322                                    5.64
 
 State in which cases (if any) you used "-oversubscribe" (to allow the number of processes to exceed the number of physical cores):
 The `--oversubscribe` flag was used for **p = 16** and **p = 32**.
