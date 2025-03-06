@@ -1,31 +1,17 @@
-Complete the table below with your results, and then fill in the final two sections at the end.
-
-Please do not edit or remove table or section headings, as the autograder script uses these to
-locate the start and end of the table.
-
-Each row of the table will be split into columns using the Python "split()" method. Therefore,
-- fill in each column with values;
-- only use whitespace between columns;
-- do not add any non-numeric characters (which would cause the value to be read as zero);
-- do not worry if your columns are not perfectly aligned.
-
-For the parallel speed-up S, please note that:
-- the time you should use is already output by the provided code;
-- take as the serial execution time the time output by the code when run with a single process.
-  Hence, the speed-up for 1 process in the table below must be 1.00.
-
-
 No. Nodes:    Total No. Processes:     Mean time (average of 3 runs) in seconds:      Parallel speed-up, S:
 ==========    ====================     =========================================      =====================
-1                       1                                                                                     
-1                       2                                                                                     
-1                       4                                                                                     
-1                       8                                                                                     
-2                       16                                                                                    
-2                       32                                                                                    
+1                       1                   0.007451                                    1.00
+1                       2                   0.004094                                    1.82
+1                       4                   0.001984                                    3.76
+1                       8                   0.001143                                    6.52
+2                       16                  0.001100                                    6.77
+2                       32                  0.001322                                    5.64
 
-State in which cases (if any) you used "-oversubscribe" (to allow the number of processes to exceed the
-number of physical cores):
+State in which cases (if any) you used "-oversubscribe" (to allow the number of processes to exceed the number of physical cores):
+The `--oversubscribe` flag was used for **p = 16** and **p = 32**.
 
 Provide a brief interpretation of your results:
-
+1. **Performance Scaling:** The execution time decreases as the number of processes increases, showing good parallel speed-up up to `p=8`.
+2. **Diminishing Returns:** Beyond `p=8`, speed-up gains start to level off due to communication overhead.
+3. **Communication Overhead:** The drop in efficiency for `p=32` indicates that inter-process communication is a limiting factor.
+4. **Optimal Performance:** The best performance gain is observed around `p=8` or `p=16` before diminishing returns set in.
