@@ -1,5 +1,3 @@
-// Updated cwk2.c with parallel variance calculation and execution time measurement
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -37,7 +35,7 @@ int main(int argc, char **argv) {
     float *localData = (float*)malloc(localSize * sizeof(float));
     MPI_Scatter(globalData, localSize, MPI_FLOAT, localData, localSize, MPI_FLOAT, 0, MPI_COMM_WORLD);
 
-    double startTime = MPI_Wtime(); // Start timing
+    double startTime = MPI_Wtime();
     
     // Compute local sum
     float localSum = 0.0f;
@@ -81,13 +79,12 @@ int main(int argc, char **argv) {
         variance = globalVarianceSum / globalSize;
     }
     
-    double endTime = MPI_Wtime(); // End timing
+    double endTime = MPI_Wtime();
 
-    // Output results on rank 0
     if (rank == 0) {
-        printf("Parallel Mean Computed: %f\n", mean);
-        printf("Parallel Variance Computed: %f\n", variance);
-        printf("Total time taken: %f s\n", endTime - startTime);
+        printf( "Total time taken: %f s\n", endTime - startTime );
+        finalMeanAndVariance(mean, variance);
+        printf( "SERIAL CHECK: Mean=%g and Variance=%g.\n", mean, variance );
     }
     
     free(localData);
